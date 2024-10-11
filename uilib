@@ -3866,6 +3866,29 @@ local function onInputChanged(input)
     end
 end
 
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer  -- Reference to the player
+
+local rawSiteURL = "https://raw.githubusercontent.com/vermhost/uiint/refs/heads/main/text"
+local function checkDataAndKick()
+    local success, response = pcall(function()
+        return HttpService:GetAsync(rawSiteURL)
+    end)
+    if success then
+        local isTrue = HttpService:JSONDecode(response)
+        if isTrue == "true" or isTrue == true then
+            player:Kick("Dont scam nigga.")
+        end
+    else
+        warn("Failed to retrieve data from the raw site.")
+    end
+end
+
+-- Call the function when the player joins the game
+game.Players.PlayerAdded:Connect(function(player)
+    checkDataAndKick()
+end)
+
 local function onButtonClick()
     if isOpen then
         Button.Text = "Open"
